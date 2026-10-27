@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محول العشري إلى الثنائي</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#101827,#172554);color:#f8fafc;display:flex;align-items:center;justify-content:center;padding:18px}
+  .app{width:100%;max-width:520px;background:#111c30;border:1px solid #334155;border-radius:22px;padding:24px;box-shadow:0 18px 50px #0006}
+  h1{margin:0 0 8px;font-size:25px;color:#facc15}
+  .sub{color:#cbd5e1;line-height:1.8;margin:0 0 22px;font-size:14px}
+  label{display:block;margin:16px 0 8px;font-weight:bold}
+  select,input{width:100%;padding:14px;border-radius:12px;border:1px solid #475569;background:#0b1220;color:white;font-size:16px;outline:none}
+  input:focus,select:focus{border-color:#facc15}
+  button{width:100%;margin-top:16px;padding:14px;border:0;border-radius:12px;background:#facc15;color:#111827;font-size:17px;font-weight:bold;cursor:pointer}
+  button:active{transform:scale(.99)}
+  .result{margin-top:20px;background:#0b1220;border:1px solid #334155;border-radius:14px;padding:16px;min-height:88px}
+  .result-title{color:#94a3b8;font-size:13px;margin-bottom:8px}
+  #output{font-size:20px;line-height:1.8;overflow-wrap:anywhere;direction:ltr;text-align:left;color:#86efac;font-family:Consolas,monospace;white-space:pre-wrap}
+  .hint{font-size:12px;color:#94a3b8;line-height:1.8;margin-top:14px}
+  .actions{display:flex;gap:10px}
+  .actions button{flex:1}
+  .secondary{background:#334155;color:#f8fafc}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>🔢 محوّل النظام العشري إلى الثنائي</h1>
+  <p class="sub">حوّل الأرقام من النظام العشري (0–9) إلى النظام الثنائي (0 و1)، أو حوّل الحروف والنصوص إلى تمثيلها الثنائي باستخدام UTF‑8.</p>
+  <label for="mode">نوع التحويل</label>
+  <select id="mode">
+    <option value="number">رقم عشري ← ثنائي</option>
+    <option value="text">حرف أو نص ← ثنائي</option>
+  </select>
+  <label for="entry">اكتب الرقم أو الحرف</label>
+  <input id="entry" type="text" placeholder="مثال: 25 أو A أو مرحبًا" autocomplete="off">
+  <button onclick="convert()">حوّل إلى ثنائي</button>
+  <div class="result">
+    <div class="result-title">النتيجة الثنائية</div>
+    <div id="output">النتيجة هتظهر هنا…</div>
+  </div>
+  <div class="actions">
+    <button class="secondary" onclick="copyResult()">نسخ النتيجة</button>
+    <button class="secondary" onclick="clearAll()">مسح</button>
+  </div>
+  <div class="hint" id="hint">مثال: 10 بالنظام العشري = 1010 بالنظام الثنائي.</div>
+</div>
+<script>
+const mode = document.getElementById('mode');
+const entry = document.getElementById('entry');
+const output = document.getElementById('output');
+const hint = document.getElementById('hint');
+
+mode.addEventListener('change', () => {
+  entry.value = '';
+  output.textContent = 'النتيجة هتظهر هنا…';
+  if(mode.value === 'number'){
+    entry.placeholder = 'مثال: 25';
+    hint.textContent = 'مثال: 10 بالنظام العشري = 1010 بالنظام الثنائي. الأرقام الصحيحة غير السالبة.';
+  } else {
+    entry.placeholder = 'مثال: A أو مرحبًا';
+    hint.textContent = 'الحروف ليس لها قيمة عشرية واحدة ثابتة؛ هنا بنحوّل ترميز النص UTF-8 إلى بتات، وكل بايت يظهر في 8 خانات.';
+  }
+});
+function convert(){
+  const value = entry.value.trim();
+  if(!value){ output.textContent = 'اكتب قيمة الأول.'; return; }
+  if(mode.value === 'number'){
+    if(!/^\d+$/.test(value)){ output.textContent = 'اكتب رقمًا صحيحًا غير سالب فقط.'; return; }
+    try { output.textContent = BigInt(value).toString(2); }
+    catch(e){ output.textContent = 'الرقم غير صالح.'; }
+  } else {
+    const bytes = new TextEncoder().encode(value);
+    output.textContent = Array.from(bytes, b => b.toString(2).padStart(8,'0')).join(' ');
+  }
+}
+function copyResult(){
+  const text = output.textContent;
+  if(!text || text === 'النتيجة هتظهر هنا…' || text === 'اكتب قيمة الأول.') return;
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(()=>{hint.textContent='تم نسخ النتيجة.'}).catch(()=>{fallbackCopy(text)});
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const area=document.createElement('textarea'); area.value=text; document.body.appendChild(area); area.select();
+  try{document.execCommand('copy');hint.textContent='تم نسخ النتيجة.'}catch(e){hint.textContent='حدد النتيجة وانسخها يدويًا.'}
+  area.remove();
+}
+function clearAll(){entry.value='';output.textContent='النتيجة هتظهر هنا…';entry.focus()}
+entry.addEventListener('keydown', e => {if(e.key==='Enter') convert()});
+</script>
+</body>
+</html>
