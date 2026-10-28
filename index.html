@@ -1,94 +1,33 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محول العشري إلى الثنائي</title>
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101827"><title>محول أنظمة الأعداد</title>
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#101827,#172554);color:#f8fafc;display:flex;align-items:center;justify-content:center;padding:18px}
-  .app{width:100%;max-width:520px;background:#111c30;border:1px solid #334155;border-radius:22px;padding:24px;box-shadow:0 18px 50px #0006}
-  h1{margin:0 0 8px;font-size:25px;color:#facc15}
-  .sub{color:#cbd5e1;line-height:1.8;margin:0 0 22px;font-size:14px}
-  label{display:block;margin:16px 0 8px;font-weight:bold}
-  select,input{width:100%;padding:14px;border-radius:12px;border:1px solid #475569;background:#0b1220;color:white;font-size:16px;outline:none}
-  input:focus,select:focus{border-color:#facc15}
-  button{width:100%;margin-top:16px;padding:14px;border:0;border-radius:12px;background:#facc15;color:#111827;font-size:17px;font-weight:bold;cursor:pointer}
-  button:active{transform:scale(.99)}
-  .result{margin-top:20px;background:#0b1220;border:1px solid #334155;border-radius:14px;padding:16px;min-height:88px}
-  .result-title{color:#94a3b8;font-size:13px;margin-bottom:8px}
-  #output{font-size:20px;line-height:1.8;overflow-wrap:anywhere;direction:ltr;text-align:left;color:#86efac;font-family:Consolas,monospace;white-space:pre-wrap}
-  .hint{font-size:12px;color:#94a3b8;line-height:1.8;margin-top:14px}
-  .actions{display:flex;gap:10px}
-  .actions button{flex:1}
-  .secondary{background:#334155;color:#f8fafc}
-</style>
-</head>
-<body>
-<div class="app">
-  <h1>🔢 محوّل النظام العشري إلى الثنائي</h1>
-  <p class="sub">حوّل الأرقام من النظام العشري (0–9) إلى النظام الثنائي (0 و1)، أو حوّل الحروف والنصوص إلى تمثيلها الثنائي باستخدام UTF‑8.</p>
-  <label for="mode">نوع التحويل</label>
-  <select id="mode">
-    <option value="number">رقم عشري ← ثنائي</option>
-    <option value="text">حرف أو نص ← ثنائي</option>
-  </select>
-  <label for="entry">اكتب الرقم أو الحرف</label>
-  <input id="entry" type="text" placeholder="مثال: 25 أو A أو مرحبًا" autocomplete="off">
-  <button onclick="convert()">حوّل إلى ثنائي</button>
-  <div class="result">
-    <div class="result-title">النتيجة الثنائية</div>
-    <div id="output">النتيجة هتظهر هنا…</div>
-  </div>
-  <div class="actions">
-    <button class="secondary" onclick="copyResult()">نسخ النتيجة</button>
-    <button class="secondary" onclick="clearAll()">مسح</button>
-  </div>
-  <div class="hint" id="hint">مثال: 10 بالنظام العشري = 1010 بالنظام الثنائي.</div>
-</div>
+:root{--bg:#0b1020;--p:#131c31;--line:#2b3954;--t:#f4f7fb;--m:#a8b5ca;--g:#facc15;--ok:#86efac;--blue:#7dd3fc;--err:#fca5a5}*{box-sizing:border-box}body{margin:0;padding:16px;background:radial-gradient(ellipse at top,#1c2b4b,#0b1020 65%);color:var(--t);font-family:Tahoma,Arial,sans-serif;min-height:100vh}.wrap{max-width:950px;margin:auto}header{text-align:center;padding:20px 8px 24px}.logo{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 12px;border-radius:20px;background:#253351;border:1px solid #465775;font-size:28px}h1{margin:0 0 10px;color:var(--g);font-size:clamp(24px,5vw,36px)}header p,.note{color:var(--m);line-height:1.9;font-size:14px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab{flex:1;min-width:125px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--p);color:var(--t);font-weight:bold;cursor:pointer}.tab.active{background:var(--g);color:#111;border-color:var(--g)}.panel{padding:clamp(16px,3vw,26px);background:var(--p);border:1px solid var(--line);border-radius:20px;margin-bottom:16px;box-shadow:0 18px 50px #0003}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:620px){body{padding:9px}.grid{grid-template-columns:1fr}.tabs{display:grid;grid-template-columns:1fr 1fr}.panel{border-radius:15px}}.title{font-size:18px;color:var(--blue);margin:0 0 16px}.field{margin-bottom:14px}label{display:block;font-weight:bold;margin-bottom:8px}input,select,textarea{width:100%;padding:13px 14px;border-radius:12px;border:1px solid #40516f;background:#0c1426;color:var(--t);font-size:16px;outline:none}textarea{min-height:115px;resize:vertical;line-height:1.8}input:focus,select:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 2px #facc1520}.row{display:flex;gap:9px;flex-wrap:wrap}.primary,.secondary{border:0;border-radius:12px;padding:13px 16px;font: bold 15px Tahoma,Arial;cursor:pointer}.primary{background:var(--g);color:#111827;flex:1}.secondary{background:#293750;color:white;border:1px solid #42536f}.result{margin-top:18px;padding:16px;background:#0c1426;border:1px solid var(--line);border-radius:14px}.resulthead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;color:var(--m);font-size:13px;margin-bottom:10px}.out{font:16px/1.9 Consolas,monospace;direction:ltr;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ok);min-height:28px}.error{color:var(--err);line-height:1.7;margin-top:8px}.note{font-size:13px;margin:12px 0 0}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{border:1px solid var(--line);background:#1a2740;color:var(--blue);padding:7px 10px;border-radius:999px;cursor:pointer;font-size:13px}.hidden{display:none!important}footer{text-align:center;color:var(--m);font-size:12px;padding:8px 0 20px}table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}td,th{padding:10px;border-bottom:1px solid var(--line);text-align:center}th{color:var(--g)}
+</style></head><body><div class="wrap">
+<header><div class="logo">01</div><h1>محول أنظمة الأعداد والترميز</h1><p>حوّل بين الثنائي والعشري والثماني والسداسي عشر، وحوّل النصوص والحروف إلى ثنائي والعكس.<br>أداة تعليمية مجانية تعمل مباشرة في المتصفح.</p></header>
+<div class="tabs"><button class="tab active" data-tab="numbers">🔢 أنظمة الأعداد</button><button class="tab" data-tab="text">🔤 النصوص والحروف</button><button class="tab" data-tab="ascii">📋 جدول ASCII</button></div>
+<section class="panel" id="numbers"><h2 class="title">التحويل بين قواعد الأعداد</h2>
+<div class="grid"><div class="field"><label for="fromBase">من النظام</label><select id="fromBase"><option value="2">ثنائي (Base 2)</option><option value="8">ثماني (Base 8)</option><option value="10" selected>عشري (Base 10)</option><option value="16">سداسي عشر (Base 16)</option></select></div><div class="field"><label for="toBase">إلى النظام</label><select id="toBase"><option value="2" selected>ثنائي (Base 2)</option><option value="8">ثماني (Base 8)</option><option value="10">عشري (Base 10)</option><option value="16">سداسي عشر (Base 16)</option></select></div></div>
+<div class="field"><label for="numberInput">الرقم المراد تحويله</label><input id="numberInput" placeholder="مثال: 101101 أو 2F أو 45" autocomplete="off" spellcheck="false"></div><div class="row"><button class="primary" id="convertNumber">حوّل الرقم</button><button class="secondary" id="swapBases">⇄ عكس النظامين</button><button class="secondary" id="clearNumber">مسح</button></div>
+<div class="result"><div class="resulthead"><span>النتيجة</span><button class="secondary" id="copyNumber">نسخ النتيجة</button></div><div class="out" id="numberResult">النتيجة هتظهر هنا…</div><div class="error" id="numberError"></div></div>
+<p class="note">الحروف A–F مسموح بها في النظام السداسي عشر. يقبل البرنامج الأعداد الصحيحة والسالبة، والكسور البسيطة المفصولة بنقطة.</p><div class="chips"><button class="chip" data-example="101101" data-from="2">101101 ثنائي</button><button class="chip" data-example="157" data-from="10">157 عشري</button><button class="chip" data-example="735" data-from="8">735 ثماني</button><button class="chip" data-example="2F" data-from="16">2F سداسي عشر</button></div></section>
+<section class="panel hidden" id="text"><h2 class="title">تحويل الحروف والنصوص إلى ثنائي والعكس</h2>
+<div class="field"><label for="textMode">نوع العملية</label><select id="textMode"><option value="encode">نص أو حروف ← بايتات ثنائية (UTF-8)</option><option value="decode">بايتات ثنائية ← نص أو حروف (UTF-8)</option><option value="ascii">حرف إنجليزي ← قيمة ASCII ثم ثنائي</option></select></div>
+<div class="field"><label for="textInput">النص أو البايتات</label><textarea id="textInput" placeholder="اكتب مثلًا: Hello أو A أو 01001000 01101001" spellcheck="false"></textarea></div><div class="row"><button class="primary" id="convertText">حوّل</button><button class="secondary" id="clearText">مسح</button></div>
+<div class="result"><div class="resulthead"><span>النتيجة</span><button class="secondary" id="copyText">نسخ النتيجة</button></div><div class="out" id="textResult">النتيجة هتظهر هنا…</div><div class="error" id="textError"></div></div>
+<p class="note">مهم: الحرف ليس له تمثيل ثنائي واحد مستقل عن الترميز. النصوص هنا تستخدم UTF-8، وASCII يناسب الحروف الإنجليزية الأساسية فقط. كل بايت يظهر في 8 بتات.</p><div class="chips"><button class="chip" id="exampleA">جرّب الحرف A</button><button class="chip" id="exampleHello">جرّب Hello</button><button class="chip" id="exampleDecode">جرّب فك 01000001</button></div></section>
+<section class="panel hidden" id="ascii"><h2 class="title">جدول ASCII للحروف الإنجليزية</h2><p class="note">اكتب حرفًا واحدًا أو رقمًا إنجليزيًا أو رمزًا من ASCII (0 إلى 127) لمعرفة قيمته العشرية والثنائية والسداسية عشر.</p><div class="field" style="margin-top:14px"><label for="asciiInput">الحرف أو الرمز</label><input id="asciiInput" maxlength="1" placeholder="مثال: A"></div><button class="primary" id="lookupAscii">اعرض القيمة</button><div class="result" id="asciiResult">اكتب حرفًا واضغط «اعرض القيمة».</div>
+<table><thead><tr><th>الحرف</th><th>عشري</th><th>ثنائي (8 بت)</th><th>سداسي عشر</th></tr></thead><tbody><tr><td>A</td><td>65</td><td dir="ltr">01000001</td><td>41</td></tr><tr><td>B</td><td>66</td><td dir="ltr">01000010</td><td>42</td></tr><tr><td>a</td><td>97</td><td dir="ltr">01100001</td><td>61</td></tr><tr><td>0</td><td>48</td><td dir="ltr">00110000</td><td>30</td></tr><tr><td>Space (مسافة)</td><td>32</td><td dir="ltr">00100000</td><td>20</td></tr></tbody></table></section>
+<footer>أداة تعليمية مستقلة — لا تحتاج إلى تسجيل دخول أو اتصال بالإنترنت بعد تحميل الصفحة.</footer></div>
 <script>
-const mode = document.getElementById('mode');
-const entry = document.getElementById('entry');
-const output = document.getElementById('output');
-const hint = document.getElementById('hint');
-
-mode.addEventListener('change', () => {
-  entry.value = '';
-  output.textContent = 'النتيجة هتظهر هنا…';
-  if(mode.value === 'number'){
-    entry.placeholder = 'مثال: 25';
-    hint.textContent = 'مثال: 10 بالنظام العشري = 1010 بالنظام الثنائي. الأرقام الصحيحة غير السالبة.';
-  } else {
-    entry.placeholder = 'مثال: A أو مرحبًا';
-    hint.textContent = 'الحروف ليس لها قيمة عشرية واحدة ثابتة؛ هنا بنحوّل ترميز النص UTF-8 إلى بتات، وكل بايت يظهر في 8 خانات.';
-  }
-});
-function convert(){
-  const value = entry.value.trim();
-  if(!value){ output.textContent = 'اكتب قيمة الأول.'; return; }
-  if(mode.value === 'number'){
-    if(!/^\d+$/.test(value)){ output.textContent = 'اكتب رقمًا صحيحًا غير سالب فقط.'; return; }
-    try { output.textContent = BigInt(value).toString(2); }
-    catch(e){ output.textContent = 'الرقم غير صالح.'; }
-  } else {
-    const bytes = new TextEncoder().encode(value);
-    output.textContent = Array.from(bytes, b => b.toString(2).padStart(8,'0')).join(' ');
-  }
-}
-function copyResult(){
-  const text = output.textContent;
-  if(!text || text === 'النتيجة هتظهر هنا…' || text === 'اكتب قيمة الأول.') return;
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(text).then(()=>{hint.textContent='تم نسخ النتيجة.'}).catch(()=>{fallbackCopy(text)});
-  } else fallbackCopy(text);
-}
-function fallbackCopy(text){
-  const area=document.createElement('textarea'); area.value=text; document.body.appendChild(area); area.select();
-  try{document.execCommand('copy');hint.textContent='تم نسخ النتيجة.'}catch(e){hint.textContent='حدد النتيجة وانسخها يدويًا.'}
-  area.remove();
-}
-function clearAll(){entry.value='';output.textContent='النتيجة هتظهر هنا…';entry.focus()}
-entry.addEventListener('keydown', e => {if(e.key==='Enter') convert()});
-</script>
-</body>
-</html>
+const $=id=>document.getElementById(id);
+function integerBase(s,b){let n=0n;for(const c of s.toLowerCase()){const d=parseInt(c,16);if(!Number.isInteger(d)||d>=b)throw Error('رقم غير صالح');n=n*BigInt(b)+BigInt(d)}return n}
+function toBase(n,b){let sign=n<0n?'-':'';if(n<0)n=-n;return sign+n.toString(b).toUpperCase()}
+function convertNumber(){const from=+$('fromBase').value,to=+$('toBase').value;let s=$('numberInput').value.trim().replaceAll('_','');$('numberError').textContent='';try{if(!s)throw Error('اكتب الرقم المراد تحويله.');let sign=1n;if(s[0]==='-'||s[0]==='+'){if(s[0]==='-')sign=-1n;s=s.slice(1)}const valid=from===2?/^[01]+$/:from===8?/^[0-7]+$/:from===10?/^\d+$/:/^[0-9a-fA-F]+$/;if(s.includes('.')){if(from!==10||!/^\d+\.\d+$/.test((sign<0n?'-':'')+s))throw Error('الكسور مدعومة حاليًا عند التحويل من النظام العشري فقط.');let v=Number((sign<0n?'-':'')+s);if(!Number.isFinite(v))throw Error('الرقم غير صالح.');let whole=BigInt(Math.trunc(Math.abs(v))),frac=Math.abs(v)-Math.trunc(Math.abs(v)),digits='';for(let i=0;i<12&&frac>1e-12;i++){frac*=to;let d=Math.floor(frac);digits+='0123456789ABCDEF'[d];frac-=d}let out=(v<0?'-':'')+toBase(whole,to);$('numberResult').textContent=digits?out+'.'+digits.replace(/0+$/,''):out;return}if(!valid.test(s))throw Error(`القيمة غير صحيحة للنظام ${from}.`);let n=integerBase(s,from)*sign;$('numberResult').textContent=toBase(n,to)}catch(e){$('numberResult').textContent='تعذّر التحويل.';$('numberError').textContent=e.message}}
+$('convertNumber').onclick=convertNumber;$('numberInput').addEventListener('keydown',e=>{if(e.key==='Enter')convertNumber()});$('swapBases').onclick=()=>{let a=$('fromBase').value;$('fromBase').value=$('toBase').value;$('toBase').value=a;convertNumber()};$('clearNumber').onclick=()=>{$('numberInput').value='';$('numberResult').textContent='النتيجة هتظهر هنا…';$('numberError').textContent=''};document.querySelectorAll('[data-example]').forEach(b=>b.onclick=()=>{$('numberInput').value=b.dataset.example;$('fromBase').value=b.dataset.from;convertNumber()});
+function convertText(){const mode=$('textMode').value,value=$('textInput').value;$('textError').textContent='';try{if(!value)throw Error('اكتب نصًا أو بايتات أولًا.');let result;if(mode==='encode')result=Array.from(new TextEncoder().encode(value),b=>b.toString(2).padStart(8,'0')).join(' ');else if(mode==='ascii'){result=Array.from(value,ch=>{let cp=ch.codePointAt(0);if(cp>127)throw Error('وضع ASCII يقبل الرموز الأساسية فقط (0–127). استخدم UTF-8 للنصوص العربية.');return `${ch===' '?'مسافة':ch} → عشري: ${cp} | ثنائي: ${cp.toString(2).padStart(8,'0')} | Hex: ${cp.toString(16).toUpperCase().padStart(2,'0')}`}).join('\n')}else{let tokens=value.trim().replace(/[,;]+/g,' ').replace(/0b/g,'').split(/\s+/);if(tokens.some(t=>!/^[01]{1,8}$/.test(t)))throw Error('اكتب مجموعات ثنائية من 1 إلى 8 بتات، مثل 01000001 01000010.');result=new TextDecoder('utf-8',{fatal:true}).decode(new Uint8Array(tokens.map(t=>parseInt(t,2))))}$('textResult').textContent=result}catch(e){$('textResult').textContent='';$('textError').textContent=e.message}}
+$('convertText').onclick=convertText;$('clearText').onclick=()=>{$('textInput').value='';$('textResult').textContent='النتيجة هتظهر هنا…';$('textError').textContent=''};$('textMode').onchange=()=>{$('textResult').textContent='النتيجة هتظهر هنا…';$('textError').textContent=''};$('exampleA').onclick=()=>{$('textMode').value='ascii';$('textInput').value='A';convertText()};$('exampleHello').onclick=()=>{$('textMode').value='encode';$('textInput').value='Hello';convertText()};$('exampleDecode').onclick=()=>{$('textMode').value='decode';$('textInput').value='01000001';convertText()};
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('lookupAscii').onclick=()=>{const s=$('asciiInput').value;if(!s){$('asciiResult').textContent='اكتب حرفًا أو رمزًا الأول.';return}const cp=s.codePointAt(0);if(Array.from(s).length!==1||cp>127){$('asciiResult').textContent='أدخل رمزًا واحدًا من ASCII (0–127)، مثل A أو 7 أو !';return}$('asciiResult').innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px"><div>الحرف<h3>${s===' '?'مسافة':esc(s)}</h3></div><div>عشري<h3>${cp}</h3></div><div>ثنائي<h3 dir="ltr">${cp.toString(2).padStart(8,'0')}</h3></div><div>Hex<h3>${cp.toString(16).toUpperCase().padStart(2,'0')}</h3></div></div>`};$('asciiInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('lookupAscii').click()});
+async function copy(id,btn){let s=$(id).textContent;if(!s||s.includes('هتظهر هنا'))return;try{await navigator.clipboard.writeText(s)}catch(e){let t=document.createElement('textarea');t.value=s;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}let old=$(btn).textContent;$(btn).textContent='اتنسخت ✓';setTimeout(()=>$(btn).textContent=old,1200)}$('copyNumber').onclick=()=>copy('numberResult','copyNumber');$('copyText').onclick=()=>copy('textResult','copyText');
+document.querySelectorAll('.tab').forEach(tab=>tab.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));['numbers','text','ascii'].forEach(id=>$(id).classList.toggle('hidden',id!==tab.dataset.tab))});
+</script></body></html>
